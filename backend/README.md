@@ -1,19 +1,23 @@
-# /users/register Endpoint Documentation
+# API Endpoint Documentation
 
-## Description
-This endpoint is used to register a new user. It accepts user details in the request body, validates them, and then creates a new user with a hashed password. Upon successful registration, it returns an authentication token along with the user details.
+---
 
-## URL
+## /users/register Endpoint
+
+**Description:**  
+Registers a new user by accepting their details, hashing the password, and creating the user in the database. On success, the endpoint returns an authentication token along with the created user object.
+
+**URL:**  
 `POST /users/register`
 
-## Request Body
-The request body must be in JSON format and include the following properties:
+**Request Body:**  
+The request body should be in JSON format and must include the following fields:
 
-- **fullname** (object): An object containing:
-  - **firstname** (string): The user's first name (minimum 3 characters).
-  - **lastname** (string): The user's last name (optional, minimum 3 characters if provided).
+- **fullname** (object):  
+  - **firstname** (string): User's first name (minimum 3 characters).  
+  - **lastname** (string): User's last name (optional, minimum 3 characters if provided).
 - **email** (string): A valid email address.
-- **password** (string): The user's password (minimum 6 characters).
+- **password** (string): Password (minimum 6 characters).
 
 Example:
 ```json
@@ -27,56 +31,123 @@ Example:
 }
 ```
 
-## Validation
-- The `email` field must be a valid email.
-- `fullname.firstname` must be at least 3 characters long.
-- `password` must be at least 6 characters long.
+**Responses:**
 
-If validation fails, the endpoint returns HTTP status 400 with details about the validation errors.
-
-## Responses
-
-### Success (201 Created)
-- **Status Code:** `201`
-- **Response Body:** JSON object containing:
-  - `token`: A JWT token generated for authentication.
+- **201 Created:**  
+  On successful registration, returns a JSON object containing:
+  - `token`: A JWT token for authentication.
   - `user`: The created user object.
 
-Example:
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "_id": "60d0fe4f5311236168a109ca",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
-  }
-}
-```
-
-### Validation Error (400 - Bad Request)
-- **Status Code:** `400`
-- **Response Body:** JSON object containing the error details.
-
-Example:
-```json
-{
-  "errors": [
-    {
-      "msg": "firstname must be 3 characters long or more",
-      "param": "fullname.firstname",
-      "location": "body"
+  Example:
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "_id": "60d0fe4f5311236168a109ca",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
     }
-  ]
-}
-```
+  }
+  ```
 
-### Server Error (500 - Internal Server Error)
-If any unexpected error occurs during user registration.
+- **400 Bad Request:**  
+  If the input validation fails, returns an error detailing the validation issues.
+
+  Example:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "firstname must be 3 characters long or more",
+        "param": "fullname.firstname",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **500 Internal Server Error:**  
+  For unexpected server errors.
 
 ---
 
-Ensure that your server has the necessary environment variables set, such as `JWT_SECRET` for token generation.
+## /users/login Endpoint
+
+**Description:**  
+Logs in an existing user. The endpoint verifies the provided email and password. If the credentials are valid, it returns an authentication token and the user object; otherwise, it returns an error message.
+
+**URL:**  
+`POST /users/login`
+
+**Request Body:**  
+The request should be in JSON format with the following fields:
+
+- **email** (string): A valid email address.
+- **password** (string): User's password (minimum 6 characters).
+
+Example:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "secret123"
+}
+```
+
+**Responses:**
+
+- **200 OK:**  
+  On successful login, returns a JSON object containing:
+  - `token`: A JWT token for authentication.
+  - `user`: The user object.
+
+  Example:
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "_id": "60d0fe4f5311236168a109ca",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+
+- **400 Bad Request:**  
+  If input validation fails, returns details about the validation errors.
+
+  Example:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Password must be atleast 6 characters long",
+        "param": "password",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **401 Unauthorized:**  
+  Returned when the email does not exist or the password is incorrect.
+
+  Example:
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+- **500 Internal Server Error:**  
+  For unexpected server errors.
+
+---
+
+**Note:**  
+Ensure that your server has the required environment variables configured, such as `JWT_SECRET` for token generation.
