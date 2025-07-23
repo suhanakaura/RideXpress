@@ -215,3 +215,107 @@ Logs out the authenticated user by clearing the authentication token cookie and 
 
 **Note:**  
 Ensure that your server has the required environment variables configured, such as `JWT_SECRET` for token generation.
+
+# Captain Endpoint Documentation
+
+---
+
+## /captain/register Endpoint
+
+**Description:**  
+Registers a new captain by accepting their personal details, vehicle details, and password. The endpoint validates the request, hashes the password, and creates a new captain entry in the database. On success, it returns an authentication token along with the captain's data.
+
+**URL:**  
+`POST /captain/register`
+
+**Request Body:**  
+The request body should be in JSON format and must include the following fields:
+
+- **fullname** (object):  
+  - **firstname** (string): The captain's first name (minimum 3 characters required).  
+  - **lastname** (string): The captain's last name (optional).
+- **email** (string): A valid email address.
+- **password** (string): The captain's password (minimum 6 characters required).
+- **vehicle** (object):  
+  - **color** (string): The color of the vehicle (minimum 3 characters required).
+  - **plate** (string): The vehicle's plate number (minimum 3 characters required).
+  - **capacity** (number): The seating or load capacity of the vehicle (minimum value: 1).
+  - **vehicleType** (string): The type of the vehicle. Allowed values: `"car"`, `"motorcycle"`, `"auto"`.
+
+Example:
+```json
+{
+  "fullname": {
+    "firstname": "Alice",
+    "lastname": "Smith"
+  },
+  "email": "alice.smith@example.com",
+  "password": "securepass",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+**Responses:**
+
+- **201 Created:**  
+  On successful registration, returns a JSON object containing:
+  - `token`: A JWT token used for authentication.
+  - `captain`: The created captain object.
+
+Example:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "60d0fe4f5311236168a109ca",
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+- **400 Bad Request:**  
+  If the input validation fails, the endpoint returns details about the validation errors.
+
+Example:
+```json
+{
+  "errors": [
+    {
+      "msg": "firstname must be at least 3 characters long",
+      "param": "fullname.firstname",
+      "location": "body"
+    }
+  ]
+}
+```
+
+- **401 Unauthorized:**  
+  If a captain with the provided email already exists, the endpoint returns an error message.
+
+Example:
+```json
+{
+  "message": "captain already exists"
+}
+```
+
+- **500 Internal Server Error:**  
+  Returned for any unexpected server errors.
+
+**Note:**  
+Ensure that your server is correctly configured with the necessary environment variables, such as `JWT_SECRET`, for token generation
