@@ -319,3 +319,153 @@ Example:
 
 **Note:**  
 Ensure that your server is correctly configured with the necessary environment variables, such as `JWT_SECRET`, for token generation
+
+## /captain/login Endpoint
+
+**Description:**  
+Logs in an existing captain. The endpoint verifies the provided email and password. If the credentials are valid, it returns an authentication token along with the captain's data; otherwise, it returns an error message.
+
+**URL:**  
+`POST /captain/login`
+
+**Request Body:**  
+The request should be in JSON format with the following fields:
+
+- **email** (string): A valid email address.
+- **password** (string): The captain's password (minimum 6 characters).
+
+Example:
+```json
+{
+  "email": "alice.smith@example.com",
+  "password": "securepass"
+}
+```
+
+**Responses:**
+
+- **201 Created:**  
+  On successful login, returns a JSON object containing:
+  - `token`: A JWT token used for authentication.
+  - `captain`: The captain object.
+
+Example:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "captain": {
+    "_id": "60d0fe4f5311236168a109ca",
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+- **400 Bad Request:**  
+  If input validation fails or the credentials are invalid, returns an error message.
+
+Example:
+```json
+{
+  "message": "invalid email or password"
+}
+```
+
+- **500 Internal Server Error:**  
+  For unexpected server errors.
+
+---
+
+## /captain/profile Endpoint
+
+**Description:**  
+Returns the profile of the authenticated captain.
+
+**URL:**  
+`GET /captain/profile`
+
+**Headers:**  
+- A valid JWT token must be provided either in the `token` cookie or in the Authorization header as `Bearer <token>`.
+
+**Responses:**
+
+- **201 Created:**  
+  On successful authentication, returns a JSON object containing the captain's data.
+
+Example:
+```json
+{
+  "captain": {
+    "_id": "60d0fe4f5311236168a109ca",
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+- **401 Unauthorized:**  
+  If the token is missing, invalid, or blacklisted.
+
+Example:
+```json
+{
+  "message": "unauthorized"
+}
+```
+
+---
+
+## /captain/logout Endpoint
+
+**Description:**  
+Logs out the authenticated captain by clearing the authentication token cookie and adding the token to a blacklist.
+
+**URL:**  
+`GET /captain/logout`
+
+**Headers:**  
+- A valid JWT token must be provided either in the `token` cookie or in the Authorization header as `Bearer <token>`.
+
+**Responses:**
+
+- **201 Created:**  
+  Upon successful logout, returns a confirmation message.
+
+Example:
+```json
+{
+  "message": "logged out successfully"
+}
+```
+
+- **401 Unauthorized:**  
+  If the token is missing, invalid, or already blacklisted.
+
+Example:
+```json
+{
+  "message": "unauthorized"
+}
+```
+
+- **500 Internal Server Error:**  
+  For unexpected server
