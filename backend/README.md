@@ -149,5 +149,69 @@ Example:
 
 ---
 
+## /users/profile Endpoint
+
+**Description:**  
+Returns the profile of the authenticated user.
+
+**URL:**  
+`GET /users/profile`
+
+**Headers:**  
+- A valid JWT token must be provided either in the `token` cookie or in the Authorization header as `Bearer <token>`.
+
+**Responses:**  
+
+- **200 OK:**  
+  Returns the authenticated user's data in JSON format.
+
+  Example:
+  ```json
+  {
+    "_id": "60d0fe4f5311236168a109ca",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "socketId": "optional_socket_id"
+  }
+  ```
+
+- **401 Unauthorized:**  
+  If the token is missing, invalid, or blacklisted.
+  ```json
+  {
+    "message": "unauthorized user"
+  }
+  ```
+
+---
+
+## /users/logout Endpoint
+
+**Description:**  
+Logs out the authenticated user by clearing the authentication token cookie and adding the token to a blacklist.
+
+**URL:**  
+`GET /users/logout`
+
+**Headers:**  
+- A valid JWT token must be provided either in the `token` cookie or in the Authorization header as `Bearer <token>`.
+
+**Responses:**  
+
+- **200 OK:**  
+  Returns a confirmation message once the user is logged out successfully.
+
+  Example:
+  ```json
+  {
+    "message": "logged out"
+  }
+  ```
+
+---
+
 **Note:**  
 Ensure that your server has the required environment variables configured, such as `JWT_SECRET` for token generation.
