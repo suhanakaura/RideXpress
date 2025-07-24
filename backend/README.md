@@ -220,13 +220,13 @@ Ensure that your server has the required environment variables configured, such 
 
 ---
 
-## /captain/register Endpoint
+## /captains/register Endpoint
 
 **Description:**  
 Registers a new captain by accepting their personal details, vehicle details, and password. The endpoint validates the request, hashes the password, and creates a new captain entry in the database. On success, it returns an authentication token along with the captain's data.
 
 **URL:**  
-`POST /captain/register`
+`POST /captains/register`
 
 **Request Body:**  
 The request body should be in JSON format and must include the following fields:
@@ -320,13 +320,13 @@ Example:
 **Note:**  
 Ensure that your server is correctly configured with the necessary environment variables, such as `JWT_SECRET`, for token generation
 
-## /captain/login Endpoint
+## /captains/login Endpoint
 
 **Description:**  
 Logs in an existing captain. The endpoint verifies the provided email and password. If the credentials are valid, it returns an authentication token along with the captain's data; otherwise, it returns an error message.
 
 **URL:**  
-`POST /captain/login`
+`POST /captains/login`
 
 **Request Body:**  
 The request should be in JSON format with the following fields:
@@ -385,13 +385,13 @@ Example:
 
 ---
 
-## /captain/profile Endpoint
+## /captains/profile Endpoint
 
 **Description:**  
 Returns the profile of the authenticated captain.
 
 **URL:**  
-`GET /captain/profile`
+`GET /captains/profile`
 
 **Headers:**  
 - A valid JWT token must be provided either in the `token` cookie or in the Authorization header as `Bearer <token>`.
@@ -434,13 +434,13 @@ Example:
 
 ---
 
-## /captain/logout Endpoint
+## /captains/logout Endpoint
 
 **Description:**  
 Logs out the authenticated captain by clearing the authentication token cookie and adding the token to a blacklist.
 
 **URL:**  
-`GET /captain/logout`
+`GET /captains/logout`
 
 **Headers:**  
 - A valid JWT token must be provided either in the `token` cookie or in the Authorization header as `Bearer <token>`.
