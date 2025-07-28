@@ -8,9 +8,10 @@ const CaptainContext = ({children}) => {
             lastName:''
         }
     })
+    const [isLoading,setIsLoading] = useState(false)
   return (
     <div>
-      <captainDataContext.Provider value={{captain,setCaptain}}>
+      <captainDataContext.Provider value={{captain,setCaptain,isLoading,setIsLoading}}>
         {children}
       </captainDataContext.Provider>
     </div>

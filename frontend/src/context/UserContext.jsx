@@ -8,9 +8,10 @@ const UserContext = ({children}) => {
       lastName:''
     }
   })
+  const [isLoading,setIsLoading] = useState(false)
   return (
     <div>
-      <userDataContext.Provider value={{user,setUser}}>
+      <userDataContext.Provider value={{user,setUser,isLoading,setIsLoading}}>
         {children}
       </userDataContext.Provider>
     </div>
