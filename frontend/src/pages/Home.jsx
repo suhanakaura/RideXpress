@@ -4,18 +4,19 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../components/LocationSearchPanel";
-import car from "../assets/car2.webp"
-import moto from "../assets/moto.png"
-import auto from "../assets/auto.webp"
+import VehiclePanel from "../components/VehiclePanel";
+import ConfirmedRide from "../components/ConfirmedRide";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanel, setVehiclePanel] = useState(false);
+  const [confirmedRidePanel, setConfirmedRidePanel] = useState(false);
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
+  const confirmedRidePanelRef = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
     setPickup("");
@@ -55,7 +56,20 @@ const Home = () => {
       transform:'translateY(100%)'
     })
     }
-  },[vehiclePanel])
+  },[vehiclePanel]);
+
+  useGSAP(function(){
+    if(confirmedRidePanel){
+      gsap.to(confirmedRidePanelRef.current,{
+      transform:'translateY(0)'
+    })
+    }
+    else{
+      gsap.to(confirmedRidePanelRef.current,{
+      transform:'translateY(100%)'
+    })
+    }
+  },[confirmedRidePanel]);
   return (
     <div className="h-screen relative overflow-hidden">
       <h1 className="absolute left-5 top-5 text-2xl font-semibold">
@@ -112,36 +126,11 @@ const Home = () => {
           <LocationSearchPanel setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel}/>
         </div>
       </div>
-      <div ref={vehiclePanelRef} className="fixed w-full px-3 py-6 z-10 bottom-0 bg-white translate-y-full">
-        <h5 onClick={()=>{setVehiclePanel(false)}} className="py-1 absolute top-0 text-center w-[93%]"><i className="ri-arrow-down-wide-line text-2xl text-gray-200"></i></h5>
-        <h3 className="text-2xl font-semibold mb-5">Choose a vehicle</h3>
-        <div className="flex w-full border-2 border-gray-100 active:border-black mb-2 rounded-xl p-3 items-center justify-between">
-          <img className="h-15 bg-transparent" src={car} alt="" />
-          <div className="w-1/2 ml-4">
-            <h4 className="font-medium text-lg">XpressCar<span><i className="ri-user-fill"></i>4</span></h4>
-            <h5 className="font-medium text-sm">2 mins away</h5>
-            <p className="font-normal text-xs text-gray-600">Affordable, secure rides</p>
-          </div>
-          <div className="text-xl font-semibold">$193.20</div>
-        </div>
-        <div className="flex w-full border-2 border-gray-100 active:border-black mb-2 rounded-xl p-3 items-center justify-between">
-          <img className="h-15 bg-transparent" src={moto} alt="" />
-          <div className="w-1/2 ml-10">
-            <h4 className="font-medium text-lg">XpressMoto<span><i className="ri-user-fill"></i>2</span></h4>
-            <h5 className="font-medium text-sm">3 mins away</h5>
-            <p className="font-normal text-xs text-gray-600">Affordable, secure rides</p>
-          </div>
-          <div className="text-xl font-semibold">$60.90</div>
-        </div>
-        <div className="flex w-full mb-2 border-2 border-gray-100 active:border-black rounded-xl p-3 items-center justify-between">
-          <img className="h-15 bg-transparent" src={auto} alt="" />
-          <div className="w-1/2 ml-8">
-            <h4 className="font-medium text-lg">XpressAuto<span><i className="ri-user-fill"></i>3</span></h4>
-            <h5 className="font-medium text-sm">5 mins away</h5>
-            <p className="font-normal text-xs text-gray-600">Affordable, secure rides</p>
-          </div>
-          <div className="text-xl font-semibold">$100.8</div>
-        </div>
+      <div ref={vehiclePanelRef} className="fixed w-full px-3 py-6 z-10 bottom-0 bg-white translate-y-full pt-12">
+        <VehiclePanel setConfirmedRidePanel={setConfirmedRidePanel} setVehiclePanel={setVehiclePanel}/>
+      </div>
+      <div ref={confirmedRidePanelRef} className="fixed w-full px-3 py-6 z-10 bottom-0 bg-white translate-y-full pt-12">
+        <ConfirmedRide setConfirmedRidePanel={setConfirmedRidePanel}/>
       </div>
     </div>
   );
