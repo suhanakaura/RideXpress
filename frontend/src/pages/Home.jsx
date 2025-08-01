@@ -12,8 +12,10 @@ const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
+  const [vehiclePanel, setVehiclePanel] = useState(false);
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
+  const vehiclePanelRef = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
     setPickup("");
@@ -41,6 +43,19 @@ const Home = () => {
     },
     [panelOpen]
   );
+
+  useGSAP(function(){
+    if(vehiclePanel){
+      gsap.to(vehiclePanelRef.current,{
+      transform:'translateY(0)'
+    })
+    }
+    else{
+      gsap.to(vehiclePanelRef.current,{
+      transform:'translateY(100%)'
+    })
+    }
+  },[vehiclePanel])
   return (
     <div className="h-screen relative overflow-hidden">
       <h1 className="absolute left-5 top-5 text-2xl font-semibold">
@@ -94,10 +109,11 @@ const Home = () => {
           </form>
         </div>
         <div ref={panelRef} className="h-[0%] bg-white">
-          <LocationSearchPanel />
+          <LocationSearchPanel setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel}/>
         </div>
       </div>
-      <div className="fixed w-full px-3 py-6 z-10 bottom-0 bg-white translate-y-full">
+      <div ref={vehiclePanelRef} className="fixed w-full px-3 py-6 z-10 bottom-0 bg-white translate-y-full">
+        <h5 onClick={()=>{setVehiclePanel(false)}} className="py-1 absolute top-0 text-center w-[93%]"><i className="ri-arrow-down-wide-line text-2xl text-gray-200"></i></h5>
         <h3 className="text-2xl font-semibold mb-5">Choose a vehicle</h3>
         <div className="flex w-full border-2 border-gray-100 active:border-black mb-2 rounded-xl p-3 items-center justify-between">
           <img className="h-15 bg-transparent" src={car} alt="" />
