@@ -1,19 +1,19 @@
 import React from "react";
 import car from "../assets/car2.webp";
 
-const ConfirmedRide = (props) => {
+const LookingForDriver = (props) => {
   return (
     <div>
       <h5
         onClick={() => {
-          props.setConfirmedRidePanel(false);
+          props.setVehicleFound(false);
         }}
         className="py-1 absolute top-0 text-center w-[93%]"
       >
         <i className="ri-arrow-down-wide-line text-2xl text-gray-200"></i>
       </h5>
       <h3 className="text-2xl font-semibold mb-5 text-center">
-        Confirm your Ride
+        Looking for a Driver
       </h3>
       <div className="flex flex-col justify-between items-center gap-2">
         <img className="h-40" src={car} alt="" />
@@ -44,18 +44,9 @@ const ConfirmedRide = (props) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            props.setVehicleFound(true);
-            props.setConfirmedRidePanel(false);
-          }}
-          className="mt-5 w-[70%] rounded-lg p-2 bg-green-600 text-white font-semibold"
-        >
-          Confirm
-        </button>
       </div>
     </div>
   );
 };
 
-export default ConfirmedRide;
+export default LookingForDriver;

@@ -1,22 +1,27 @@
 import React from "react";
 import car from "../assets/car2.webp";
 
-const ConfirmedRide = (props) => {
+
+const WaitingForDriver = (props) => {
   return (
     <div>
       <h5
         onClick={() => {
-          props.setConfirmedRidePanel(false);
+          props.setWaitingForDriver(false);
         }}
         className="py-1 absolute top-0 text-center w-[93%]"
       >
         <i className="ri-arrow-down-wide-line text-2xl text-gray-200"></i>
       </h5>
-      <h3 className="text-2xl font-semibold mb-5 text-center">
-        Confirm your Ride
-      </h3>
+      <div className="flex items-center justify-between">
+        <img className="h-10" src={car} alt="" />
+        <div className="text-right">
+          <h2 className="text-lg font-medium">Sarthak</h2>
+          <h4 className="text-lg -mt-1 -mb-1 font-semibold">MP 04 AB 1234</h4>
+          <p className="text-sm text-gray-600">Maruti Suzuki Alto</p>
+        </div>
+      </div>
       <div className="flex flex-col justify-between items-center gap-2">
-        <img className="h-40" src={car} alt="" />
         <div className="w-full mt-5">
           <div className="flex items-center gap-5 p-3 border-t-2 border-gray-200">
             <i className="text-lg ri-map-pin-range-line"></i>
@@ -44,18 +49,9 @@ const ConfirmedRide = (props) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            props.setVehicleFound(true);
-            props.setConfirmedRidePanel(false);
-          }}
-          className="mt-5 w-[70%] rounded-lg p-2 bg-green-600 text-white font-semibold"
-        >
-          Confirm
-        </button>
       </div>
     </div>
   );
 };
 
-export default ConfirmedRide;
+export default WaitingForDriver;
